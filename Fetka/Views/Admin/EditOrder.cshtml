@@ -1,0 +1,70 @@
+﻿@model Fetka.Models.YearOrder
+
+@{
+    ViewBag.Title = "Edycja zamównienia";
+}
+
+<h2>Edytuj zamówienie</h2>
+
+@using (Html.BeginForm(FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    
+<div class="form-horizontal">
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Compound.Id)
+    @Html.HiddenFor(model => model.Compound.CAS)
+    @Html.HiddenFor(model => model.Compound.Certificate)
+    @Html.HiddenFor(model => model.Compound.Description)
+    @Html.HiddenFor(model => model.Compound.IsDeleted)
+    @Html.HiddenFor(model => model.Compound.Name)
+    @Html.HiddenFor(model => model.Compound.Purity)
+    @Html.HiddenFor(model => model.Compound.Image)
+    @Html.HiddenFor(model => model.Year)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Compound.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DisplayFor(model => model.Compound.Name)
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Year, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DisplayFor(model => model.Year, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Year, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.IsRealized, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div class="checkbox">
+                @Html.EditorFor(model => model.IsRealized)
+                @Html.ValidationMessageFor(model => model.IsRealized, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Zapisz" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    @Html.ActionLink("Wróć", "ManageOrders")
+</div>

@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Fetka.Models.YearOrder>
+
+@{
+    ViewBag.Title = "RealizeOrder";
+}
+
+<h2>Realizacja zamównień</h2>
+<h4>Uwaga! Możesz zrealizować zamówienie za bieżący, @DateTime.Now.Year<text> rok!</text></h4>
+
+<p>
+    @Html.ActionLink("Złóż zamównie", "ViewBase")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Compound.Image)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Compound.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </th>
+        <th>Operacje</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @if (item.Compound.Image != null)
+            {
+                <img src="~/Resources/Pics/@item.Compound.Image" alt="" height="25px" width="25px" />
+            }
+            else
+            {
+                <img src="~/Resources/noimage.png" alt="" height="25px" width="25px" />
+            }
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Compound.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Quantity)
+        </td>
+        <td>
+            @Html.ActionLink("Realizuj", "Realize", new { id = item.Id })
+        </td>
+    </tr>
+}
+
+</table>

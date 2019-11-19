@@ -1,0 +1,76 @@
+﻿@model Fetka.Models.Compound
+
+@{
+    ViewBag.Title = "Szczegóły";
+}
+
+<h2>Szczegóły</h2>
+
+<div>
+    <h4>Odczynnik</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Image)
+        </dt>
+
+        <dd>
+            @if (Model.Image != null)
+            {
+                <img src="~/Resources/Pics/@Model.Image" alt="" height="200px" width="200px" />
+                     }
+                     else
+                     {
+                <img src="~/Resources/noimage.png" alt="" height="200px" width="200px" />
+            }
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CAS)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CAS)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Purity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Purity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Certificate)
+        </dt>
+
+        <dd>
+            @if (Model.Certificate)
+            {<text>Tak</text> }
+        else
+        { <text>Nie</text>}
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Wróć", "Index") |
+    @Html.ActionLink("Zamów", "Order", new { id = Model.Id })
+</p>

@@ -9,6 +9,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Fetka.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Fetka.Commons;
 
 namespace Fetka.Controllers
 {
@@ -17,6 +19,7 @@ namespace Fetka.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext adb = new ApplicationDbContext();
 
         public AccountController()
         {
@@ -75,11 +78,20 @@ namespace Fetka.Controllers
 
             // Nie powoduje to liczenia niepowodzeń logowania w celu zablokowania konta
             // Aby włączyć wyzwalanie blokady konta po określonej liczbie niepomyślnych prób wprowadzenia hasła, zmień ustawienie na shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.Login, model.Password, model.RememberMe, shouldLockout: false);
+
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    ApplicationUser logged = UserManager.FindByName(model.Login);
+                    string roleName = UserManager.GetRoles(logged.Id).FirstOrDefault();
+                    if (logged.Blocked)
+                    {
+                        AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                        ModelState.AddModelError("", "Użytkownik został zablokowany. Skontaktuj się z administratorem.");
+                        return View(model);
+                    }
+                    return RedirectToLocal(returnUrl, roleName);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -151,12 +163,14 @@ namespace Fetka.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Login, Login = model.Login, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, Blocked = false };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    Roles role = Roles.User;
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+
+                    await UserManager.AddToRoleAsync(user.Id, role.ToString());
                     // Aby uzyskać więcej informacji o sposobie włączania potwierdzania konta i resetowaniu hasła, odwiedź stronę https://go.microsoft.com/fwlink/?LinkID=320771
                     // Wyślij wiadomość e-mail z tym łączem
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -445,12 +459,37 @@ namespace Fetka.Controllers
 
         private ActionResult RedirectToLocal(string returnUrl)
         {
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-            return RedirectToAction("Index", "Home");
+                if (Url.IsLocalUrl(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
+                return RedirectToAction("Index", "Home");
         }
+
+        private ActionResult RedirectToLocal(string returnUrl, string role)
+        {
+            if (role.Equals("User"))
+            {
+                return RedirectToAction("Index", "User");
+            } else if (role.Equals("Admin"))
+            {
+                return RedirectToAction("Index", "Admin");
+            } else
+            {
+                if (Url.IsLocalUrl(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        //private ActionResult RedirectToLocal(ApplicationUser user)
+        //{
+        //    if (user != null)
+        //        return RedirectToAction("Index", "Home", user);
+        //    return RedirectToAction("Index", "Home");
+        //}
 
         internal class ChallengeResult : HttpUnauthorizedResult
         {

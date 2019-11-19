@@ -1,0 +1,83 @@
+﻿@model IEnumerable<Fetka.Models.Compound>
+@using PagedList.Mvc;
+@using PagedList;
+<link href="/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@{
+    ViewBag.Title = "Zarządzanie bazą";
+}
+
+<h2>Zarządzenie bazą</h2>
+
+<p>
+    @Html.ActionLink("Dodaj nowy", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Image)
+        </th>
+        <th>
+            @*@Html.DisplayNameFor(model => model.Name)*@
+            @Html.ActionLink("Nazwa", "ManageBase", new { sortOrder = ViewBag.NameSortParm })
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CAS)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Purity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Certificate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in ViewBag.OnePageOfProducts)
+    {
+        <tr>
+            <td>
+                @if (item.Image != null)
+                {
+                    <img src="~/Resources/Pics/@item.Image" alt="" height="25px" width="25px" />
+                }
+                else
+                {
+                    <img src="~/Resources/noimage.png" alt="" height="25px" width="25px" />
+                }
+            </td>
+            <td>
+                @*@Html.DisplayFor(modelItem => item.Name)*@
+                @item.Name
+            </td>
+            <td>
+                @*@Html.DisplayFor(modelItem => item.CAS)*@
+                @item.CAS
+            </td>
+            <td>
+                @*@Html.DisplayFor(modelItem => item.Purity)*@
+                @item.Purity
+            </td>
+            <td>
+                @if (item.Certificate)
+                {<text>Tak</text> }
+            else
+            { <text>Nie</text>}
+            </td>
+            <td>
+                @*@Html.DisplayFor(modelItem => item.Description)*@
+                @item.Description
+            </td>
+            <td>
+                @Html.ActionLink("Edytuj", "EditCompound", new { id = item.Id }) |
+                @Html.ActionLink("Usuń", "DeleteCompound", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>
+
+@Html.PagedListPager((IPagedList)ViewBag.OnePageOfProducts, page => Url.Action("ManageBase", new { page } ))
+

@@ -1,0 +1,75 @@
+﻿@model IEnumerable<Fetka.Models.YearOrder>
+
+@{
+    ViewBag.Title = "Zarządzanie zamówieniem";
+}
+
+<h2>Zarządzanie zamówieniami</h2>
+
+<p>
+    @using (Html.BeginForm("ManageOrders", "Admin"))
+    {
+        <div class="form-group">
+            <div class="col-md-10">
+                <label for="firstName">Podaj rok</label>
+                <input type="text" id="year" name="year" class="form-control" />
+                <input type="submit" value="Filtruj" class="btn btn-default" />
+            </div>
+        </div>
+    }
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Compound.Image)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Compound.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Year)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsRealized)
+        </th>
+        <th>Operacje</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td>
+            @if (item.Compound.Image != null)
+            {
+                <img src="~/Resources/Pics/@item.Compound.Image" alt="" height="25px" width="25px" />
+            }
+            else
+            {
+                <img src="~/Resources/noimage.png" alt="" height="25px" width="25px" />
+            }
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Compound.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Year)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Quantity)
+        </td>
+        <td>
+            @if (item.IsRealized)
+            {<text>Tak</text> }
+        else
+        { <text>Nie</text>}
+        </td>
+        <td>
+            @Html.ActionLink("Edytuj", "EditOrder", new { id = item.Id }) |
+            @Html.ActionLink("Usuń", "DeleteOrder", new { id = item.Id })
+        </td>
+    </tr>
+    }
+
+</table>

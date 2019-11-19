@@ -49,9 +49,14 @@ namespace Fetka.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Adres e-mail")]
-        [EmailAddress]
-        public string Email { get; set; }
+        [StringLength(50, ErrorMessage = "Login musi zawierać 2 do 50 znaków.", MinimumLength = 2)]
+        [Display(Name = "Login")]
+        public string Login { get; set; }
+
+        //[Required]
+        //[Display(Name = "Adres e-mail")]
+        //[EmailAddress]
+        //public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
@@ -65,6 +70,21 @@ namespace Fetka.Models
     public class RegisterViewModel
     {
         [Required]
+        [StringLength(50, ErrorMessage = "Login musi zawierać 2 do 50 znaków.", MinimumLength = 2)]
+        [Display(Name = "Login")]
+        public string Login { get; set; }
+
+        [Required]
+        [StringLength(50, ErrorMessage = "Login musi zawierać 2 do 50 znaków.", MinimumLength = 2)]
+        [Display(Name = "Imię")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [StringLength(50, ErrorMessage = "Login musi zawierać 2 do 50 znaków.", MinimumLength = 2)]
+        [Display(Name = "Nazwisko")]
+        public string LastName { get; set; }
+
+        //[Required]
         [EmailAddress]
         [Display(Name = "Adres e-mail")]
         public string Email { get; set; }

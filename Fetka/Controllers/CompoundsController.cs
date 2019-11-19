@@ -11,107 +11,107 @@ using Fetka.Models;
 
 namespace Fetka.Controllers
 {
-    public class TeachersController : Controller
+    public class CompoundsController : Controller
     {
-        private SchoolContext db = new SchoolContext();
+        private CompoundContext db = new CompoundContext();
 
-        // GET: Teachers
+        // GET: Compounds
         public ActionResult Index()
         {
-            return View(db.Teachers.ToList());
+            return View(db.Compounds.ToList());
         }
 
-        // GET: Teachers/Details/5
+        // GET: Compounds/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Teacher teacher = db.Teachers.Find(id);
-            if (teacher == null)
+            Compound compound = db.Compounds.Find(id);
+            if (compound == null)
             {
                 return HttpNotFound();
             }
-            return View(teacher);
+            return View(compound);
         }
 
-        // GET: Teachers/Create
+        // GET: Compounds/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Teachers/Create
+        // POST: Compounds/Create
         // Aby zapewnić ochronę przed atakami polegającymi na przesyłaniu dodatkowych danych, włącz określone właściwości, z którymi chcesz utworzyć powiązania.
         // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Level")] Teacher teacher)
+        public ActionResult Create([Bind(Include = "CompoundId,Name,CAS,Purity,Certificate,Description,IsDeleted")] Compound compound)
         {
             if (ModelState.IsValid)
             {
-                db.Teachers.Add(teacher);
+                db.Compounds.Add(compound);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(teacher);
+            return View(compound);
         }
 
-        // GET: Teachers/Edit/5
+        // GET: Compounds/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Teacher teacher = db.Teachers.Find(id);
-            if (teacher == null)
+            Compound compound = db.Compounds.Find(id);
+            if (compound == null)
             {
                 return HttpNotFound();
             }
-            return View(teacher);
+            return View(compound);
         }
 
-        // POST: Teachers/Edit/5
+        // POST: Compounds/Edit/5
         // Aby zapewnić ochronę przed atakami polegającymi na przesyłaniu dodatkowych danych, włącz określone właściwości, z którymi chcesz utworzyć powiązania.
         // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Level")] Teacher teacher)
+        public ActionResult Edit([Bind(Include = "CompoundId,Name,CAS,Purity,Certificate,Description,IsDeleted")] Compound compound)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(teacher).State = EntityState.Modified;
+                db.Entry(compound).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(teacher);
+            return View(compound);
         }
 
-        // GET: Teachers/Delete/5
+        // GET: Compounds/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Teacher teacher = db.Teachers.Find(id);
-            if (teacher == null)
+            Compound compound = db.Compounds.Find(id);
+            if (compound == null)
             {
                 return HttpNotFound();
             }
-            return View(teacher);
+            return View(compound);
         }
 
-        // POST: Teachers/Delete/5
+        // POST: Compounds/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Teacher teacher = db.Teachers.Find(id);
-            db.Teachers.Remove(teacher);
+            Compound compound = db.Compounds.Find(id);
+            db.Compounds.Remove(compound);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

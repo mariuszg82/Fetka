@@ -18,8 +18,7 @@ namespace Fetka
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-            Database.SetInitializer(new SchoolInitializer());
+            Database.SetInitializer<CompoundContext>(new MyDbContextInitializer());
         }
     }
 }
